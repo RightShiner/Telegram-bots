@@ -5,9 +5,13 @@ Prerequisites
 Before you can use this bot, you will need to do the following:
 
 Create a Telegram bot using BotFather.
+
 Obtain an API key from CoinMarketCap.
+
 Install Node.js and npm on your machine.
+
 Install the required packages using npm install.
+
 Create a .env file in the root directory of the project and add your Telegram bot token and CoinMarketCap API key as follows:
 
 
