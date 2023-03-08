@@ -1,7 +1,9 @@
 Telegram Volume Alarm Bot
 This is a Telegram bot that allows users to set maximum and minimum volume alarms for a certain dex pool pair using the CoinMarketCap API. The bot is built using Node.js, Telegraf, Axios, and the CoinMarketCap API.
 
-Prerequisites
+This code sets up a Telegram bot that allows users to set maximum and minimum volume alarms for a certain cryptocurrency pair using the CoinMarketCap API. When a user sets an alarm, the bot stores the maximum and minimum volume for that pair in an object called volumeAlarms. The bot then checks the volume for each cryptocurrency pair
+
+*Prerequisites*
 
 Before you can use this bot, you will need to do the following:
 Create a Telegram bot using BotFather.
@@ -14,16 +16,15 @@ Create a .env file in the root directory of the project and add your Telegram bo
 TELEGRAM_BOT_TOKEN=<your-telegram-bot-token>
 COINMARKETCAP_API_KEY=<your-coinmarketcap-api-key>
 
-Start the bot using npm start.
-
-  Open Telegram and start a conversation with your bot.
-  Send the /start command to begin.
+*Start the bot using node telemetry.js start*
+Open Telegram and start a conversation with your bot.
+Send the /start command to begin.
 
   Follow the prompts to set your maximum and minimum volume alarms for a certain cryptocurrency pair.
 
   The bot will send you a notification if the volume for that pair exceeds your set maximum or falls below your set minimum.
 
-  Contributing
+  *Contributing*
 
   If you would like to contribute to this project, please follow these steps:
 
