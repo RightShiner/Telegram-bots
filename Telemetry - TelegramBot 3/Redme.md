@@ -10,18 +10,15 @@ Create a Telegram bot using BotFather.
 Obtain an API key from CoinMarketCap.
 Install Node.js and npm on your machine.
 Install the required packages using npm install.
+Create a .env file in the root directory of the project and add your Telegram bot token and CoinMarketCap API key as follows
 
-Create a .env file in the root directory of the project and add your Telegram bot token and CoinMarketCap API key as follows:
+*Tests*
 
-TELEGRAM_BOT_TOKEN=<your-telegram-bot-token>
-COINMARKETCAP_API_KEY=<your-coinmarketcap-api-key>
-
-*Start the bot using node telemetry.js start*
+Start the bot using node telemetry.js 
 Open Telegram and start a conversation with your bot.
 Send the /start command to begin.
 
-  Follow the prompts to set your maximum and minimum volume alarms for a certain cryptocurrency pair.
-
+  Follow the prompts to create a new pair and your maximum and minimum volume alarms for all registered pairs.
   The bot will send you a notification if the volume for that pair exceeds your set maximum or falls below your set minimum.
 
   *Contributing*
