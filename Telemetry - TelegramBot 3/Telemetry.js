@@ -1,3 +1,5 @@
+//This code sets up a Telegram bot that allows users to set maximum and minimum volume alarms for a certain cryptocurrency pair using the CoinMarketCap API. When a user sets an alarm, the bot stores the maximum and minimum volume for that pair in an object called volumeAlarms. The bot then checks the volume for each cryptocurrency pair
+
 const Telegraf = require('telegraf');
 const axios = require('axios');
 
