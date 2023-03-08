@@ -19,3 +19,5 @@ getGasFee(accountAddresses, afterDate, beforeDate, chainConfig): retrieves the t
 Most of these functions utilize Axios to make HTTP requests to GraphQL endpoints and parse the JSON data in the response. Some of them also use external configuration options to set the request timeout, API key, and other headers. The functions return various values, such as the token start balance, token pair address, latest token price, block height, transaction count, and gas fee.
 
 It is important to note that the implementation of the functions getFirstBlock, getTxnsCount, and getGasFee rely on several helper functions and variables that are not defined in the code snippet. These include getNetworkParams, chainConfig, networkConfig, and generalConfig. These functions and variables are presumably defined in other modules that are imported into this module.
+
+
