@@ -3,8 +3,11 @@
 //The bot then checks the volume for each cryptocurrency pair.
 
 const { Telegraf } = require('telegraf')
+const {Extra, Markup} = Telegraf;   // Extract Extra, Markups from Telegraf module.
+const config = require('./config'); // Configuration file that holds telegraf_token API key.
 
-const bot = new Telegraf('<YOUR_BOT_TOKEN>')
+
+const bot = new Telegraf(config.telegraf_token);    // Let's instantiate a bot using our token.
 
 // Register a pool
 bot.command('registerpool', async (ctx) => {
