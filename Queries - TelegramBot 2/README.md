@@ -1,21 +1,15 @@
-This is a JavaScript module that uses the Axios library to make HTTP requests to various GraphQL endpoints in order to retrieve data related to blockchain transactions on a given Blockchain. 
+Firstly, let's start with some background on Telegram bots. A Telegram bot is a program that runs on the Telegram platform and interacts with users through the messaging app. The bot can be programmed to perform various tasks, such as responding to user queries, providing information, or automating processes. This telegram bot contains a TheGraph script that is used to perform accounting for certain timeframes of a cluster of Blockchain wallets that traded in a given DEX protocol.
 
-The code exports several functions:
+This is an Output example
 
-axiosConfig(props): sets default configuration options for Axios library. It sets the default timeout for requests, base URL, and headers such as X-API-KEY and Content-Type.
+![ngfngfn](https://user-images.githubusercontent.com/83619829/226024998-07b9bbaf-8309-41df-9990-379e69cdd8a1.jpg)
 
-getTokenStartBalance(token, accountAddress, startDate): retrieves the starting balance of a given token for a given account address as of a specified start date. It sends a GraphQL query to the Blockchain RPC endpoint to fetch this data.
+The full script in Bitquery.js can be pruned to only perform queries for a group of hardcoded variables. If a hardcoded variable changes (for example a second pool for thesame client) we will deploy a new bot for it. 
 
-getPairAddressByGraphQL(token1, token2): retrieves the address of a token pair on the DEX. It sends a GraphQL query to the DEX endpoint to fetch this data.
+The extracted data is used to perform accounting for a cluster of Wallets that have traded on that protocol during a certain timeframe. The accounting process involves tracking the inflow and outflow of funds in the wallets and calculating the net volumen for each wallet.
 
-getLatestPriceOfToken(tokenAddress): retrieves the latest price of a token on the Dex. It sends a GraphQL query to the DEX endpoint to fetch this data.
-
-getFirstBlock(accountAddress): retrieves the block height of the first block in which a given account address appears as the transaction sender. It sends a GraphQL query to the Ethereum endpoint to fetch this data.
-
-getTxnsCount(accountAddresses, afterDate, beforeDate, chainConfig): retrieves the number of transactions that occurred on the Blockchain network between two specified dates for a given list of account addresses. It sends a GraphQL query to the Blockchain RPC endpoint to fetch this data.
-
-getGasFee(accountAddresses, afterDate, beforeDate, chainConfig): retrieves the total gas fee paid by a given list of account addresses for transactions that occurred on a given Blockchain between two specified dates. It sends a GraphQL query to the Blockchain RPC Endpoint to fetch this data.
+About the Query Script: This is a JavaScript module that uses the Axios library to make HTTP requests to various GraphQL endpoints in order to retrieve data related to blockchain transactions on a given Blockchain. 
 
 Most of these functions utilize Axios to make HTTP requests to GraphQL endpoints and parse the JSON data in the response. Some of them also use external configuration options to set the request timeout, API key, and other headers. The functions return various values, such as the token start balance, token pair address, latest token price, block height, transaction count, and gas fee.
 
-It is important to note that the implementation of the functions getFirstBlock, getTxnsCount, and getGasFee rely on several helper functions and variables that are not defined in the code snippet. These include getNetworkParams, chainConfig, networkConfig, and generalConfig. These functions and variables are presumably defined in other modules that are imported into this module.
+It is important to note that the implementation of the functions getFirstBlock, getTxnsCount, and getGasFee rely on several helper functions and variables that are not defined in the code snippet. These include getNetworkParams, chainConfig, networkConfig, and generalConfig. These functions and variables was originaly defined in other file. This is because this script was made to retrive the info from a clients database, by prompting a frontend environment. 
