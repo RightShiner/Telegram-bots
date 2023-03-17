@@ -6,11 +6,6 @@ const bot = new Telegraf('<YOUR_BOT_TOKEN>')
 
 //thepgraph Api key
 
-//Pool1 (name, pools address, router addreess, blockchain, min volumen ($), max volumen ($)
-
-//pool2 (name, pools address, router addreess, blockchain, min volumen ($), max volumen ($)
-
-
 Pair 1.
 Name: Xcre/USDC 
 Exchange: UniSwap v3 
