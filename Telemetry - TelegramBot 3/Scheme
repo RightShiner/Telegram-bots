@@ -1,0 +1,56 @@
+//The bot then checks the volume for each dex pair every hour and send notification if the daily volumen is out of range. 
+
+const { Telegraf } = require('telegraf')
+
+const bot = new Telegraf('<YOUR_BOT_TOKEN>')
+
+//thepgraph Api key
+
+Pair 1.
+Name: Xcre/USDC 
+Exchange: UniSwap v3 
+Blockchain: Polygon
+Pool: 0x32c936874ff276c626a9ed028faa10071e3a2fac
+Minimum volumen: $1000/day
+Max volumen: $3000/day
+
+Pair 2
+Name: Ethix/Eth 
+Exchange: UniSwap v2 
+Blockchain: Ethereum
+Pool: 0xb14b9464b52f502b0edf51ba3a529bc63706b458
+Minimum volumen: $1000/day
+Max volumen: $10000/day
+
+Pair 3
+Name: Ethix/Cusd 
+Exchange: UniSwap v3 
+Blockchain: Celo
+Pool: 0x3420720e561f3082f1e514a4545f0f2e0c955a5d   
+Minimum volumen: $10000/day
+Max volumen: $20000/day
+
+Pair 4
+
+Name: BBCN/BNB
+Exchange: PancakeSwap
+Blockchain: BSC
+Pool: 0x0883147a16d0ccaab5554c140a3435c74b202c66
+Minimum volumen: $100/day
+Max volumen: $2000/day
+
+
+/// The graph queries
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+bot.launch()
+
+// notification here
