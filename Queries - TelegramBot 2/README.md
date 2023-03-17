@@ -1,5 +1,9 @@
 Firstly, let's start with some background on Telegram bots. A Telegram bot is a program that runs on the Telegram platform and interacts with users through the messaging app. The bot can be programmed to perform various tasks, such as responding to user queries, providing information, or automating processes. This telegram bot contains a TheGraph script that is used to perform accounting for certain timeframes of a cluster of Blockchain wallets that traded in a given DEX protocol.
 
+Should we hardcode pair address or token0, token1? 
+
+The user should not be able to add or register a new pair. All pools variables are hardcoded in "index.js" or any other separated file.
+
 This is an Output example
 
 ![ngfngfn](https://user-images.githubusercontent.com/83619829/226024998-07b9bbaf-8309-41df-9990-379e69cdd8a1.jpg)
