@@ -1,4 +1,4 @@
-This is a JavaScript module that uses the Axios library to make HTTP requests to various GraphQL endpoints in order to retrieve data related to blockchain transactions on the Ethereum network.
+This is a JavaScript module that uses the Axios library to make HTTP requests to various GraphQL endpoints in order to retrieve data related to blockchain transactions on a given Blockchain. 
 
 The code exports several functions:
 
