@@ -88,7 +88,7 @@ const getLatestPriceOfToken = async (tokenAddress) => {
    return response.data.data.token.derivedUSD;
 };
 
-const getFirstBlock = async (accountAddress) => {
+const getFirstBlock = async (accountAddress, chainConfig) => {
    axiosConfig();
    const params = getNetworkParams(chainConfig.abbrevation);
    const query = `
@@ -131,7 +131,7 @@ const getTxnsCount = async (
    chainConfig
 ) => {
    axiosConfig();
-   const firstBlock = await getFirstBlock(accountAddresses[0]);
+   const firstBlock = await getFirstBlock(accountAddresses[0], chainConfig);
    const params = getNetworkParams(chainConfig.abbrevation);
    if (!firstBlock || firstBlock <= 0) return 0;
    const query = `
@@ -168,7 +168,7 @@ const getTxnsCount = async (
 
 const getGasFee = async (accountAddresses, afterDate = "0000-01-01", beforeDate = new Date().toISOString(), chainConfig) => {
    axiosConfig();
-   const firstBlock = await getFirstBlock(accountAddresses[0]);
+   const firstBlock = await getFirstBlock(accountAddresses[0], chainConfig);
    if (!firstBlock || firstBlock <= 0) return 0;
    const params = getNetworkParams(chainConfig.abbrevation);
    const query = `
@@ -211,7 +211,7 @@ const getVolumeOfAccountsTokensInTxns = async (
    chainConfig
 ) => {
    axiosConfig();
-   const firstBlock = await getFirstBlock(accountAddresses[18]);
+   const firstBlock = await getFirstBlock(accountAddresses[0], chainConfig);
    if (!firstBlock || firstBlock <= 0) return 0;
    const params = getNetworkParams(chainConfig.abbrevation);
    const query = `
@@ -275,7 +275,7 @@ const getVolumeOfAccountsInTxns = async (
    chainConfig
 ) => {
    axiosConfig();
-   const firstBlock = await getFirstBlock(accountAddresses[0]);
+   const firstBlock = await getFirstBlock(accountAddresses[0], chainConfig);
    if (!firstBlock || firstBlock <= 0) return 0;
    const params = getNetworkParams(chainConfig.abbrevation);
    const query = `
@@ -434,8 +434,8 @@ const getFlashloanVolumen = async (addresses, afterDate, beforeDate, chainConfig
     }
    `;
    const variables = {
-      accountAddresses: addresses
-   }
+      accountAddresses: addresses,
+   };
    const response = await axios.post("", { query: query, variables: variables });
    if (response.status !== 200) {
       console.error("Failed to fetch volume");
@@ -490,5 +490,5 @@ module.exports = {
    getVolumeOfTokensInTxns,
    getVolumeOfPoolsInTxns,
    getPairAddressByGraphQL,
-   getFlashloanVolumen
+   getFlashloanVolumen,
 };
