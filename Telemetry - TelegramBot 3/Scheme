@@ -12,7 +12,6 @@ const bot = new Telegraf('<YOUR_BOT_TOKEN>')
 
 
 Pair 1.
-
 Name: Xcre/USDC 
 Exchange: UniSwap v3 
 Blockchain: Polygon
@@ -21,7 +20,6 @@ Minimum volumen: $1000/day
 Max volumen: $3000/day
 
 Pair 2
-
 Name: Ethix/Eth 
 Exchange: UniSwap v2 
 Blockchain: Ethereum
@@ -30,7 +28,6 @@ Minimum volumen: $1000/day
 Max volumen: $10000/day
 
 Pair 3
-
 Name: Ethix/Cusd 
 Exchange: UniSwap v3 
 Blockchain: Celo
