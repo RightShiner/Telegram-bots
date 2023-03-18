@@ -1,0 +1,22 @@
+{
+  "name": "queries---telegrambot-2",
+  "version": "1.0.0",
+  "description": "A Telegram bot is a program that runs on the Telegram platform and interacts with users through the messaging app. The bot can be programmed to perform various tasks, such as responding to user queries, providing information, or automating processes. This telegram bot contains a TheGraph script that is used to perform accounting for certain timeframes of a cluster of Blockchain wallets that traded in a given DEX protocol.",
+  "main": "Scheme.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@telegraf/session": "github:telegraf/session",
+    "axios": "^1.3.4",
+    "dotenv": "^16.0.3",
+    "telegraf": "^4.12.2"
+  }
+}
