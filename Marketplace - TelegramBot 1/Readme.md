@@ -1,4 +1,11 @@
 
+## Setup
+* Set env
+    * BOT_TOKEN: telegram bot token
+    * WALLET_ADDRESS: public wallet address. This is just for text so any string would work
+* Run the code with `node bot.js`
+* Test code by messaging your telegram bot. Use /help to view instruction
+
 
 ´´
 ´´
