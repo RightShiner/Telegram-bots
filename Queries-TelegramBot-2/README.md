@@ -1,29 +1,29 @@
-## Daily Volume Alarm Bot 
+## DexQueryBot - The Dexer
 
-This is a Telegram bot that allows users to monitor maximum and minimum daily volume notifications for a certain DEX pool pair using theGraph API. The bot is built using Node.js, Telegraf, Axios. 
+## Dev
 
-When /StartBot, the bot checks the volume for each DEX Pool. The bot will send you a notification if the volume for that pair exceeds your set maximum or falls below your set minimum.
+Rename .env.example to .env and fill out the variables with your API keys.
+```sh
+BOTFATHER_API_KEY=
+BITQUERY_API_KEY=
+THEGRAPH_API_KEY=
+```
 
-The user should not be able to add or register a new pair. All pools variables are hardcoded in "index.js" or any other separated file. 
+Install packages
+```
+npm install
+```
 
- ## Prerequisites
+Run bot
+```
+node index.js
+```
 
-Before you can use this bot, you will need to do the following: Create a Telegram bot using BotFather. 
-Obtain an API key from TheGraph. 
-Install Node.js and npm on your machine. 
-Install the required packages using npm install. 
-Create a .env / gitignore file in the root directory of the project and add your Telegram bot token and CoinMarketCap API key as follows
+## Usage
 
- ## Tests
+### Fetch command
 
-Start the bot using "node index.js" 
-Send the /start command to begin.
-Add the bot to any telegram group to start receiving volumen notifications. 
+The **fetch** command is a command for the Telegram bot that performs a series of operations to obtain transaction information within a specific date range. To use the command, users must follow these steps:
 
- ## Contributing
-
-If you would like to contribute to this project, please follow these steps:
-
--Make your changes and commit them with clear, concise messages. 
--Push your changes to dev branch. 
--Submit a pull request to this repository with a description of your changes.
+Type **/fetch** followed by the start and end date parameters in the format **startDate=YYYY-MM-DD endDate=YYYY-MM-DD**.  
+For example, **/fetch startDate=2022-01-01 endDate=2022-01-31**.
