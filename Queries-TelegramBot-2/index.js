@@ -5,14 +5,10 @@ const chunkAddresses = require('./utils/chunkAddresses.js')
 const { testConstants } = require('./config')
 const Output = require('./lib/Output');
 const {
-  getTokenStartBalance,
   getTxnsCount,
   getGasFee,
-  getVolumeOfAccountsInTxns,
   getVolumeOfAccountsTokensInTxns,
-  getVolumeOfTokensInTxns,
   getVolumeOfPoolsInTxns,
-  getPairAddressByGraphQL,
   getFlashloanVolumen,
 } = require('./lib/Bitquery');
 
@@ -26,6 +22,7 @@ bot.help((ctx) => {
 })
 bot.start((ctx) => {
   ctx.reply('DexQueryBot started')
+  ctx.reply("To use the /fetch command, enter '/fetch startDate=YYYY-MM-DD endDate=YYYY-MM-DD' where startDate and endDate are the desired date range in the format of YYYY-MM-DD.")
 })
 bot.command("fetch", async (ctx) => {
   const command = '/fetch ';
