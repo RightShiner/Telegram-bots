@@ -1,5 +1,7 @@
 const generalConfig = {
-  bitqueryGraphQlUrl: "https://graphql.bitquery.io/"
+  bitqueryGraphQlUrl: "https://graphql.bitquery.io",
+  theGraphApiUrl: "https://gateway.thegraph.com/api",
+  subgraphUniswapCelo: "/subgraphs/id/9nh6Ums63wFcoZpmegyPcAFtY3CAzQc3S6cuERALYMqa"
 }
 const networkConfig = {}
 

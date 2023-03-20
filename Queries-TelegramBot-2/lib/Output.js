@@ -1,64 +1,75 @@
 class Output {
   constructor() {
-    this._botVolume = 0;
-    this._totalPoolVolume = '';
-    this._nTxns = 0;
-    this._gasFees = 0;
-    this._flVolume = 0;
+    this.pools = {
+      ethereum: {
+        uniswap: {
+          botVolume: 0,
+          totalPoolVolume: '',
+          nTxns: 0,
+          gasFees: 0,
+          flVolume: 0,
+        }
+      },
+      celo: {
+        uniswap: {
+          botVolume: 0,
+          totalPoolVolume: '',
+          nTxns: 0,
+          gasFees: 0,
+          flVolume: 0,
+        }
+      }
+    }
   }
 
   // Getter and Setter methods for botVolume
-  getBotVolume() {
-    return this._botVolume;
+  getBotVolume(pool) {
+    return this.pools[pool]['uniswap'].botVolume;
   }
 
-  setBotVolume(newBotVolume) {
-    this._botVolume = newBotVolume;
+  setBotVolume(pool, newBotVolume) {
+    this.pools[pool]['uniswap'].botVolume = newBotVolume;
   }
 
   // Getter and Setter methods for totalPoolVolume
-  getTotalPoolVolume() {
-    return this._totalPoolVolume;
+  getTotalPoolVolume(pool) {
+    return this.pools[pool]['uniswap'].totalPoolVolume;
   }
 
-  setTotalPoolVolume(newTotalPoolVolume) {
-    this._totalPoolVolume = newTotalPoolVolume;
+  setTotalPoolVolume(pool, newTotalPoolVolume) {
+    this.pools[pool]['uniswap'].totalPoolVolume = newTotalPoolVolume;
   }
 
   // Getter and Setter methods for nTxns
-  getNTxns() {
-    return this._nTxns;
+  getNTxns(pool) {
+    return this.pools[pool]['uniswap'].nTxns;
   }
 
-  setNTxns(newNTxns) {
-    this._nTxns = newNTxns;
+  setNTxns(pool, newNTxns) {
+    this.pools[pool]['uniswap'].nTxns = newNTxns;
   }
 
   // Getter and Setter methods for gasFees
-  getGasFees() {
-    return this._gasFees;
+  getGasFees(pool) {
+    return this.pools[pool]['uniswap'].gasFees;
   }
 
-  setGasFees(newGasFees) {
-    this._gasFees = newGasFees;
+  setGasFees(pool, newGasFees) {
+    this.pools[pool]['uniswap'].gasFees = newGasFees;
   }
 
   // Getter and Setter methods for flVolume
-  getFlVolume() {
-    return this._flVolume;
+  getFlVolume(pool) {
+    return this.pools[pool]['uniswap'].flVolume;
   }
 
-  setFlVolume(newFlVolume) {
-    this._flVolume = newFlVolume;
+  setFlVolume(pool, newFlVolume) {
+    this.pools[pool]['uniswap'].flVolume = newFlVolume;
   }
 
-  getFull() {
+  getFull(pool) {
     return {
-      botVolume: this._botVolume,
-      totalPoolVolume: this._totalPoolVolume,
-      nTxns: this._nTxns,
-      gasFees: this._gasFees,
-      flVolume: this._flVolume,
+      ...this.pools[pool]['uniswap']
     }
   }
 
