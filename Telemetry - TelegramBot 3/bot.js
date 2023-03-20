@@ -60,7 +60,10 @@ bot.telegram.getMe().then((bot_informations) => {
 bot.command('start', (ctx) => ctx.reply('Bot started.'));
 
 bot.hears('Harcoded Variables', async (ctx) => {
-    testRequest();
+    testRequest1();
+    testRequest2();
+    testRequest3();
+    testRequest4();
 })
 
 bot.command('StartQuering', async (ctx) => {
@@ -81,36 +84,154 @@ var task = cron.schedule('*/5 * */1 * * *', () => {
     timezone: "America/Sao_Paulo"
 });
 
-testRequest = () => {
-    const subgraphUrl = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2';
-
+testRequest1 = () => {
     // specify the query to retrieve the daily volume of a pair
     const query = `
     {
-        pair(id:"0xb14b9464b52f502b0edf51ba3a529bc63706b458")
-        
-        {
-        token0{name, symbol},
-        token1{name, symbol},
-        reserve0,
-        reserve1,
-        reserveUSD,
-        trackedReserveETH,
-          volumeUSD,
-        
+        ethereum(network: matic) {
+          dexTrades(
+            options: {limit: 1, desc: "timeInterval.minute"}
+            exchangeName: {in: ["Uniswap", "Uniswap v3"]}
+            smartContractAddress: {is: "0x32c936874ff276c626a9ed028faa10071e3a2fac"}
+          ) {
+            timeInterval {
+              minute(count: 1440)
+            }
+            baseCurrency {
+              symbol
+              address
+            }
+            quoteCurrency {
+              symbol
+              address
+            }
+            tradeAmount(in: USD)
+            trades: count
+            quoteAmount
+            quotePrice
+          }
         }
-        
-        }
+    }
     `;
 
     // send a post request to the subgraph API with the query
-    axios.post(subgraphUrl, { query })
+    axios({
+        method: 'POST',
+        url: 'https://graphql.bitquery.io',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'X-API-KEY': 'BQYqRGALIVyBewKoCxtko6SMk4QducXx',
+        },
+        data: JSON.stringify({ query }),
+        mode: 'cors',
+    })
         .then((response) => {
-            volumeData[1] = (parseFloat(response.data.data.pair.volumeUSD)).toFixed(2);
+            volumeData[0] = (parseFloat(response.data.data.ethereum.dexTrades[0].tradeAmount)).toFixed(2);
         })
         .catch((error) => {
             console.error(error);
         });
 
 }
+testRequest2 = () => {
+    // specify the query to retrieve the daily volume of a pair
+    const query = `
+    {
+        ethereum(network: ethereum) {
+          dexTrades(
+            options: {limit: 1, desc: "timeInterval.minute"}
+            exchangeName: {in: ["Uniswap", "Uniswap v2"]}
+            smartContractAddress: {is: "0xb14b9464b52f502b0edf51ba3a529bc63706b458"}      
+          ) {
+            timeInterval {
+              minute(count: 1440)
+            }
+            baseCurrency {
+              symbol
+              address
+            }
+            quoteCurrency {
+              symbol
+              address
+            }
+            tradeAmount(in: USD)
+            trades: count
+            quoteAmount
+            quotePrice
+          }
+        }
+    }
+    `;
+
+    // send a post request to the subgraph API with the query
+    axios({
+        method: 'POST',
+        url: 'https://graphql.bitquery.io',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'X-API-KEY': 'BQYqRGALIVyBewKoCxtko6SMk4QducXx',
+        },
+        data: JSON.stringify({ query }),
+        mode: 'cors',
+    })
+        .then((response) => {
+            volumeData[1] = (parseFloat(response.data.data.ethereum.dexTrades[0].tradeAmount)).toFixed(2);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+}
+testRequest3 = () => {
+ }
+testRequest4 = () => {
+    // specify the query to retrieve the daily volume of a pair
+    const query = `
+    {
+        ethereum (network: bsc) {
+          dexTrades(
+            options: {limit: 1, desc: "timeInterval.minute"}
+            exchangeName: {in: ["Pancake", "Pancake v2"]}
+            smartContractAddress: {is: "0x0883147a16d0ccaab5554c140a3435c74b202c66"}
+          ) {
+            timeInterval {
+              minute(count: 1440)
+            }
+            baseCurrency {
+              symbol
+              address
+            }
+            quoteCurrency {
+              symbol
+              address
+            }
+            tradeAmount(in: USD)
+            trades: count
+            quoteAmount
+            quotePrice
+          }
+        }
+    }
+    `;
+
+    // send a post request to the subgraph API with the query
+    axios({
+        method: 'POST',
+        url: 'https://graphql.bitquery.io',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'X-API-KEY': 'BQYqRGALIVyBewKoCxtko6SMk4QducXx',
+        },
+        data: JSON.stringify({ query }),
+        mode: 'cors',
+    })
+        .then((response) => {
+            volumeData[3] = (parseFloat(response.data.data.ethereum.dexTrades[0].tradeAmount)).toFixed(2);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
+}
+
 bot.startPolling();
