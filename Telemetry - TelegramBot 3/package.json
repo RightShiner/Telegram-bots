@@ -13,10 +13,7 @@
     "node-cron": "^3.0.2",
     "telegraf": "^3.33.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Finalgalaxy/telegram-telegraf-bot.git"
-  },
+  
   "keywords": [
     "telegram",
     "telegraf",
@@ -26,9 +23,5 @@
     "telegram-bot",
     "telegram-bots",
     "telegram-api"
-  ],
-  "bugs": {
-    "url": "https://github.com/Finalgalaxy/telegram-telegraf-bot/issues"
-  },
-  "homepage": "https://github.com/Finalgalaxy/telegram-telegraf-bot#readme"
+  ]
 }
