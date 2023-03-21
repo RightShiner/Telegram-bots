@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const Telegraf = require('telegraf');   // Module to use Telegraf API.
 const axios = require('axios');
 const config = require('./config'); // Configuration file that holds telegraf_token API key.
@@ -7,7 +10,8 @@ const Scene = require('telegraf/scenes/base');
 var cron = require('node-cron');
 
 const { Extra, Markup } = Telegraf;   // Extract Extra, Markups from Telegraf module.
-const bot = new Telegraf(config.telegraf_token);    // Let's instantiate a bot using our token.
+const bot = new Telegraf(process.env.TELEGRAF_TOKEN);    // Let's instantiate a bot using our token.
+
 const stage = new Stage();
 
 const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -73,7 +77,7 @@ bot.command('StartQuering', async (ctx) => {
 var task = cron.schedule('*/5 * */1 * * *', () => {
     volumeData.forEach((value, index) => {
         if (value > vol_range[index].max || value < vol_range[index].min) {
-            bot.telegram.sendMessage(config.chai_id,
+            bot.telegram.sendMessage(process.env.CHAI_ID,
                 `${pair_info[index].join('')}❗dailyVolumeData${index + 1} is out range value: <b><i>${value}</i></b>`,
                 { parse_mode: 'HTML' });
         }
