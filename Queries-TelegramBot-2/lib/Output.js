@@ -14,9 +14,7 @@ class Output {
         uniswap: {
           botVolume: 0,
           totalPoolVolume: '',
-          nTxns: 0,
           gasFees: 0,
-          flVolume: 0,
         }
       }
     }

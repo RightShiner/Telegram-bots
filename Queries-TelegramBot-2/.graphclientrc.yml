@@ -1,6 +1,5 @@
-
 sources:
-  - name: uniswapv3
+  - name: uniswap-v3-celo
     handler:
       graphql:
         endpoint: https://api.thegraph.com/subgraphs/name/messari/uniswap-v3-celo

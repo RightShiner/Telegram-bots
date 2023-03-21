@@ -16,8 +16,8 @@ const baseDir = cross_helpers_1.path.join(typeof __dirname === 'string' ? __dirn
 const importFn = (moduleId) => {
     const relativeModuleId = (cross_helpers_1.path.isAbsolute(moduleId) ? cross_helpers_1.path.relative(baseDir, moduleId) : moduleId).split('\\').join('/').replace(baseDir + '/', '');
     switch (relativeModuleId) {
-        case ".graphclient/sources/uniswapv3/introspectionSchema.json":
-            return Promise.resolve().then(() => tslib_1.__importStar(require("./sources/uniswapv3/introspectionSchema.json")));
+        case ".graphclient/sources/uniswap-v3-celo/introspectionSchema.json":
+            return Promise.resolve().then(() => tslib_1.__importStar(require("./sources/uniswap-v3-celo/introspectionSchema.json")));
         default:
             return Promise.reject(new Error(`Cannot find module '${relativeModuleId}'.`));
     }
@@ -45,22 +45,22 @@ async function getMeshOptions() {
     const sources = [];
     const transforms = [];
     const additionalEnvelopPlugins = [];
-    const uniswapv3Transforms = [];
+    const uniswapV3CeloTransforms = [];
     const additionalTypeDefs = [];
-    const uniswapv3Handler = new graphql_1.default({
-        name: "uniswapv3",
+    const uniswapV3CeloHandler = new graphql_1.default({
+        name: "uniswap-v3-celo",
         config: { "endpoint": "https://api.thegraph.com/subgraphs/name/messari/uniswap-v3-celo" },
         baseDir,
         cache,
         pubsub,
-        store: sourcesStore.child("uniswapv3"),
-        logger: logger.child("uniswapv3"),
+        store: sourcesStore.child("uniswap-v3-celo"),
+        logger: logger.child("uniswap-v3-celo"),
         importFn,
     });
     sources[0] = {
-        name: 'uniswapv3',
-        handler: uniswapv3Handler,
-        transforms: uniswapv3Transforms
+        name: 'uniswap-v3-celo',
+        handler: uniswapV3CeloHandler,
+        transforms: uniswapV3CeloTransforms
     };
     const additionalResolvers = [];
     const merger = new merger_bare_1.default({

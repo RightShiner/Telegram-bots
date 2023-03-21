@@ -6,21 +6,21 @@ const { testConstants } = require('./config')
 const Output = require('./lib/Output');
 
 const {
-  getTxnsCount,
-  getGasFee: getGasFeeBitQuery,
-  getVolumeOfAccountsTokensInTxns,
-  getVolumeOfPoolsInTxns,
-  getFlashloanVolumen,
+  getBootVolume,
+  getTotalPoolVolume,
+  getFlVolumeAndGasFeeAndTxns,
 } = require('./lib/Bitquery');
-const { getGasFee } = require("./lib/TheGraph")
-const { getPoolVolume, getBootVolume } = require('./lib/TheGraph.js');
+const { getGasFee, getBotVolumeAndGasFee, getPoolVolume: getPoolVolumeCelo } = require("./lib/TheGraph")
 const getTimestamp = require('./utils/getTimestamp.js');
+const getClientIds = require('./utils/getClientIds.js');
+const getNetworksByClient = require('./utils/getNetworkByClient.js');
+const getAddressesByClient = require('./utils/getAddressesByClient.js');
 
 if (!process.env.BOTFATHER_API_KEY) throw new Error("BOTFATHER_API_KEY undefined")
 if (!process.env.BITQUERY_API_KEY) throw new Error("BITQUERY_API_KEY undefined")
 
 const bot = new Telegraf(process.env.BOTFATHER_API_KEY)
-
+const clientIds = getClientIds()
 bot.help((ctx) => {
   ctx.reply('Este es un bot de ejemplo. Puedes utilizar los siguientes comandos: /start, /help')
 })
@@ -54,15 +54,25 @@ bot.command("fetch", async (ctx) => {
     return ctx.reply('Error: The date format is incorrect. The format should be YYYY-MM-DD.');
   }
 
+  if (!params.clientId) {
+    return ctx.reply('Error: The clientId params is missing. Please provide your clientId=');
+  }
+  if (!(clientIds.includes(params.clientId))) {
+    return ctx.reply("Error: Invalid clientId, don't exist");
+  }
+
   ctx.reply('Fetching data, that can take some minutes. Please wait...');
   const start = getTimestamp(params.startDate)
   const end = getTimestamp(params.endDate)
 
+  const network = getNetworksByClient(params.clientId);
+  const networkIsArray = typeof network != 'string';
+  const addresses = getAddressesByClient(params.clientId);
   const tokens = testConstants.tokens
   const pools = testConstants.pools
-  const addressesChunksCelo = chunkAddresses(testConstants.addresses, 50)
-
-  const addressesChunks = chunkAddresses(testConstants.addresses, 100)
+  
+  const addressesChunks = chunkAddresses(addresses, 100)
+  const addressesChunksCelo = chunkAddresses(addresses, 50)
 
   const output = new Output()
 
@@ -72,120 +82,102 @@ bot.command("fetch", async (ctx) => {
 
   //-------------------------
   // CELO QUERIES
-  if (params.network == 'celo') {
+  if (params.network == 'celo' && networkIsArray ? network.includes('celo') : network == 'celo') {
 
-    //GAS FEES CELO, FUNCIONA
-    const gasFeeCeloPromises = addressesChunksCelo.map(
-      (addresses) => getGasFee(addresses, start, end)
+    //BOT VOLUME AND GAS FEE CELO
+    const botVolumeAndGasFeeCeloPromises = addressesChunksCelo.map(
+      (_addresses) => getBotVolumeAndGasFee(_addresses, start, end)
     )
-    const gasFeeCelo = await Promise.all(
-      gasFeeCeloPromises.map(async (promise) => {
+    const botVolumeAndGasFeeCeloArray = await Promise.all(
+      botVolumeAndGasFeeCeloPromises
+      .map(async (promise) => {
         const result = await promise;
         await new Promise((resolve) => setTimeout(resolve, 1000));
         return result;
       })
     );
-    output.setGasFees('celo', gasFeeCelo.reduce((a, b) => a + b, 0))
 
-    //BOT VOLUME CELO
-    const botVolumeCeloPromises = addressesChunksCelo.map(
-      (addresses) => getBootVolume(addresses, start, end)
-    )
-    const botVolumeCelo = await Promise.all(
-      botVolumeCeloPromises.map(async (promise) => {
-        const result = await promise;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        return result;
-      })
-    );
-    output.setBotVolume('celo', botVolumeCelo.reduce((a, b) => a + b, 0))
+    const botVolumeAndGasFeeCelo = botVolumeAndGasFeeCeloArray.filter((value) => value != 0).reduce((a, b) => {
+      return {
+        botVolume: a.botVolume + b.botVolume,
+        gasUsedInUsd: a.gasUsedInUsd + b.gasUsedInUsd
+      };
+    }, { botVolume: 0, gasUsedInUsd: 0 })
+    
+    output.setBotVolume('celo', botVolumeAndGasFeeCelo.botVolume);
+    output.setGasFees('celo', botVolumeAndGasFeeCelo.gasUsedInUsd);
 
-    //POOL VOLUME CELO, FUNCIONA
-    const poolVolumeCelo = await getPoolVolume(start, end)
+    //POOL VOLUME CELO
+    const poolVolumeCelo = await getPoolVolumeCelo(start, end)
     output.setTotalPoolVolume('celo', poolVolumeCelo)
 
     ctx.reply(`CELO: ${JSON.stringify(output.getFull('celo'), null, 2)}`)
 
   }
 
-  if (params.network == 'ethereum') {
+  if (params.network == 'ethereum' && networkIsArray ? network.includes('ethereum') : network == 'ethereum') {
     // EHTEREUM QUERIES
-
-    // Generate getTxnsCount array of promises
-    const promisesGetCountTxns = addressesChunks.map((addresses) =>
-      getTxnsCount(addresses, params.startDate, params.endDate, "eth")
-    );
-    // Agregando intervalo de espera de 500ms entre cada promesa resuelta
-    const nTxns = await Promise.all(
-      promisesGetCountTxns.map(async (promise) => {
-        const result = await promise;
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        return result;
-      })
-    );
-    output.setNTxns('ethereum', nTxns.reduce((a, b) => a + b, 0));
-
-
-
-    const promisesGetGasFee = addressesChunks.map((addresses) =>
-      getGasFeeBitQuery(addresses, params.startDate, params.endDate, "eth")
-    );
-    // Agregando intervalo de espera de 500ms entre cada promesa resuelta
-    const gasFee = await Promise.all(
-      promisesGetGasFee.map(async (promise) => {
-        const result = await promise;
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        return result;
-      })
-    );
-    output.setGasFees('ethereum', gasFee.reduce((a, b) => a + b, 0));
-
-
-
-    const promisesBotVolume = addressesChunks.map((addresses) =>
-      getVolumeOfAccountsTokensInTxns(
-        addresses,
-        tokens,
-        params.startDate,
-        params.endDate,
-        "eth"
-      )
-    );
-
-
-    // Agregando intervalo de espera de 500ms entre cada promesa resuelta
-    const botVolume = await Promise.all(
-      promisesBotVolume.map(async (promise) => {
-        const result = await promise;
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        return result;
-      })
-    );
-    output.setBotVolume('ethereum', botVolume.reduce((a, b) => a + b, 0));
-
-    const promisesFlashLoanVolume = addressesChunks.map((addresses) =>
-      getFlashloanVolumen(addresses, params.startDate, params.endDate, "eth")
-    );
-    // Agregando intervalo de espera de 500ms entre cada promesa resuelta
-    const flashLoanVolue = await Promise.all(
-      promisesFlashLoanVolume.map(async (promise) => {
-        const result = await promise;
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        return result;
-      })
-    );
-    output.setFlVolume('ethereum', flashLoanVolue.reduce((a, b) => a + b, 0));
-
-
-    const poolVolume = await getVolumeOfPoolsInTxns(
-      pools.eth,
+ 
+    // POOL VOLUME
+    const poolVolume = await getTotalPoolVolume(
+      "0xb14b9464b52f502b0edf51ba3a529bc63706b458",
       params.startDate,
       params.endDate,
-      'eth'
-    );
+    )
+    output.setTotalPoolVolume('ethereum', poolVolume);
 
-    output.setTotalPoolVolume('ethereum', poolVolume)
+
+    // FL VOLUME - GAS FEE - NTXNS
+    const flVolumeAndGasFeeAndTxnsPromises = addressesChunks.map((_addresses) =>
+      getFlVolumeAndGasFeeAndTxns(
+        _addresses,
+        params.startDate,
+        params.endDate
+      )
+    );
+    const flVolumeAndGasFeeAndTxnsArray = await Promise.all(
+      flVolumeAndGasFeeAndTxnsPromises.map(async (promise) => {
+        const result = await promise;
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        return result;
+      })
+    );
+    const flVolumeAndGasFeeAndTxns = flVolumeAndGasFeeAndTxnsArray.reduce((a, b) => {
+      return {
+        flVolume: a.flVolume + b.flVolume,
+        nTxns: a.nTxns + b.nTxns,
+        gasFee: a.gasFee + b.gasFee
+      };
+    }, { flVolume: 0, nTxns: 0, gasFee: 0 })
+
+    output.setFlVolume('ethereum', flVolumeAndGasFeeAndTxns.flVolume);
+    output.setNTxns('ethereum', flVolumeAndGasFeeAndTxns.nTxns);
+    output.setGasFees('ethereum', flVolumeAndGasFeeAndTxns.gasFee);
+
+
+    // BOT VOLUME
+    const botVolumePromises = addressesChunks.map((_addresses) =>
+      getBootVolume(
+        _addresses,
+        [tokens['ethereum'].weth, tokens['ethereum'].ethix],
+        params.startDate,
+        params.endDate
+      )
+    );
+    
+    const botVolumeArray = await Promise.all(
+      botVolumePromises.map(async (promise) => {
+        const result = await promise;
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        return result;
+      })
+    );
+    output.setBotVolume('ethereum', botVolumeArray.reduce((a, b) => a + b, 0));
+
     ctx.reply(`ETHEREUM: ${JSON.stringify(output.getFull('ethereum'), null, 2)}`)
+  }
+
+  if (params.network == 'polygon' && networkIsArray ? 'polygon' in network : network == 'polygon') {
   }
 });
 
