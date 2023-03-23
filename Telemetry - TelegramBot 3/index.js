@@ -27,17 +27,22 @@ bot.telegram.getMe().then((bot_informations) => {
 let chain = '';
 let h24 = 0;
 let h1 = 0;
+let vol_range_flag = 0;
+
 
 bot.command('start', async (ctx) => {
-
   await ctx.reply('Bot started.');
   task.start();
 });
+bot.command('stop', async (ctx) => {
+  task.stop();
+  await ctx.reply('Bot stopped.');
+});
 
-var task = cron.schedule('*/10 * */1 * * *', () => {
-
+var task = cron.schedule('* * */3 * * *', () => {
+  
+  vol_range_flag = 0;
   pairs.forEach(async (value, index) => {
-
     switch (value.Blockchain) {
       case 'Polygon':
         chain = 'polygon';
@@ -62,7 +67,7 @@ var task = cron.schedule('*/10 * */1 * * *', () => {
         h24 = response.data.pair.volume.h24;
         h1 = response.data.pair.volume.h1;
 
-        if (h24 > value.Max || h24 < value.Min) {
+        if (h24 > value.Max && h24 < value.Min) {
           bot.telegram.sendMessage(process.env.CHAI_ID,
             `⚠Warning\n` +
             `✅Name: ${value.Name}\n` +
@@ -72,6 +77,14 @@ var task = cron.schedule('*/10 * */1 * * *', () => {
             `❎Volumen range: $${value.Min}-${value.Max}/day\n` +
             `❗dailyVolumeData is out range value: ${h24}`
           );
+        }
+        else {
+          vol_range_flag++;
+          if(vol_range_flag == pairs.length) {
+            bot.telegram.sendMessage(process.env.CHAI_ID,
+              'No pools are out of range');
+              vol_range_flag = 0;
+          }
         }
       })
       .catch((error) => {

@@ -20,17 +20,9 @@ const pairs = [
         Exchange: "UniSwap v3",
         Blockchain: "Celo",
         Pool: "0x3420720e561f3082f1e514a4545f0f2e0c955a5d",
-        Min: 10000,
-        Max: 20000
-    },
-    {
-        Name: "BBCN/BNB",
-        Exchange: "PancakeSwap",
-        Blockchain: "BSC",
-        Pool: "0x0883147a16d0ccaab5554c140a3435c74b202c66",
-        Min: 100,
-        Max: 2000
-    },
+        Min: 5000,
+        Max: 21000
+    },   
 ]
 
 module.exports = pairs;
