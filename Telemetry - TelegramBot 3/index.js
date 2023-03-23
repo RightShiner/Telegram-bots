@@ -29,14 +29,14 @@ let h24 = 0;
 let h1 = 0;
 let vol_range_flag = 0;
 
-
 bot.command('start', async (ctx) => {
   await ctx.reply('Bot started.');
   pair_show();
   task.start();
 });
 bot.command('show', async (ctx) => {
-  vol_show();
+  await ctx.reply('Current State');
+  vol_show(1);
 });
 bot.command('stop', async (ctx) => {
   task.stop();
@@ -44,8 +44,7 @@ bot.command('stop', async (ctx) => {
 });
 
 var task = cron.schedule('0 */3 * * *', () => {
-  vol_show();
-  
+  vol_show(2);
 }, {
   scheduled: false,
   timezone: "America/Sao_Paulo"
@@ -54,7 +53,7 @@ var task = cron.schedule('0 */3 * * *', () => {
 const pair_show = () => {
   pairs.forEach(async (value, index) => {
     bot.telegram.sendMessage(process.env.CHAI_ID,
-      `🤑Pair${index+1}\n` +
+      `🤑Pair${index + 1}\n` +
       `Name: ${value.Name}\n` +
       `Exchange: ${value.Exchange}\n` +
       `Blockchain: ${value.Blockchain}\n` +
@@ -63,7 +62,7 @@ const pair_show = () => {
     );
   });
 }
-const vol_show = () => {
+const vol_show = (data_flag) => {
   vol_range_flag = 0;
   pairs.forEach(async (value, index) => {
     switch (value.Blockchain) {
@@ -89,24 +88,36 @@ const vol_show = () => {
       .then((response) => {
         h24 = response.data.pair.volume.h24;
         h1 = response.data.pair.volume.h1;
-
-        if (h24 > value.Max || h24 < value.Min) {
+        if (data_flag == 1) {
           bot.telegram.sendMessage(process.env.CHAI_ID,
-            `⚠Warning\n` +
-            `✅Name: ${value.Name}\n` +
-            `✅Exchange: ${value.Exchange}\n` +
-            `✅Blockchain: ${value.Blockchain}\n` +
-            `✅Pool: ${value.Pool}\n\n` +
-            `❎Volumen range: $${value.Min}-${value.Max}/day\n` +
-            `❗dailyVolumeData is out range value: ${h24}`
+            `🤑Pair${index + 1}\n` +
+            `Name: ${value.Name}\n` +
+            `Exchange: ${value.Exchange}\n` +
+            `Blockchain: ${value.Blockchain}\n` +
+            `Pool: ${value.Pool}\n` +
+            `Volumen range: $${value.Min}-${value.Max}/day\n` +
+            `dailyVolumeData: ${h24}`
           );
         }
-        else {
-          vol_range_flag++;
-          if(vol_range_flag == pairs.length) {
+        if (data_flag == 2) {
+          if (h24 > value.Max || h24 < value.Min) {
             bot.telegram.sendMessage(process.env.CHAI_ID,
-              'No pools are out of range');
+              `⚠Warning\n` +
+              `✅Name: ${value.Name}\n` +
+              `✅Exchange: ${value.Exchange}\n` +
+              `✅Blockchain: ${value.Blockchain}\n` +
+              `✅Pool: ${value.Pool}\n\n` +
+              `❎Volumen range: $${value.Min}-${value.Max}/day\n` +
+              `❗dailyVolumeData is out range value: ${h24}`
+            );
+          }
+          else {
+            vol_range_flag++;
+            if (vol_range_flag == pairs.length) {
+              bot.telegram.sendMessage(process.env.CHAI_ID,
+                'No pools are out of range');
               vol_range_flag = 0;
+            }
           }
         }
       })
