@@ -32,15 +32,38 @@ let vol_range_flag = 0;
 
 bot.command('start', async (ctx) => {
   await ctx.reply('Bot started.');
+  pair_show();
   task.start();
+});
+bot.command('show', async (ctx) => {
+  vol_show();
 });
 bot.command('stop', async (ctx) => {
   task.stop();
   await ctx.reply('Bot stopped.');
 });
 
-var task = cron.schedule('* * */3 * * *', () => {
+var task = cron.schedule('0 */3 * * *', () => {
+  vol_show();
   
+}, {
+  scheduled: false,
+  timezone: "America/Sao_Paulo"
+});
+
+const pair_show = () => {
+  pairs.forEach(async (value, index) => {
+    bot.telegram.sendMessage(process.env.CHAI_ID,
+      `🤑Pair${index+1}\n` +
+      `Name: ${value.Name}\n` +
+      `Exchange: ${value.Exchange}\n` +
+      `Blockchain: ${value.Blockchain}\n` +
+      `Pool: ${value.Pool}\n` +
+      `Volumen range: $${value.Min}-${value.Max}/day\n`
+    );
+  });
+}
+const vol_show = () => {
   vol_range_flag = 0;
   pairs.forEach(async (value, index) => {
     switch (value.Blockchain) {
@@ -67,7 +90,7 @@ var task = cron.schedule('* * */3 * * *', () => {
         h24 = response.data.pair.volume.h24;
         h1 = response.data.pair.volume.h1;
 
-        if (h24 > value.Max && h24 < value.Min) {
+        if (h24 > value.Max || h24 < value.Min) {
           bot.telegram.sendMessage(process.env.CHAI_ID,
             `⚠Warning\n` +
             `✅Name: ${value.Name}\n` +
@@ -91,10 +114,5 @@ var task = cron.schedule('* * */3 * * *', () => {
         console.error(error);
       });
   });
-}, {
-  scheduled: false,
-  timezone: "America/Sao_Paulo"
-});
-
-
+}
 bot.startPolling();
