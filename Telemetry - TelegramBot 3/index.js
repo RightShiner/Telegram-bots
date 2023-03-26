@@ -33,7 +33,6 @@ let vol_len = 0;
 
 bot.command('start', async (ctx) => {
   await ctx.reply('Bot started.');
-  pair_show();
   task.start();
 });
 bot.command('show', async (ctx) => {
@@ -52,20 +51,6 @@ var task = cron.schedule('0 */3 * * *', () => {
   timezone: "America/Sao_Paulo"
 });
 
-const pair_show = () => {
-  vol_len = 0;
-  pairs.forEach(async (value, index) => {
-    vol_tmp[index] = 
-      `🤑Pair${index + 1}\n` +
-      `Name: ${value.Name}\n` +
-      `Exchange: ${value.Exchange}\n` +
-      `Blockchain: ${value.Blockchain}\n` +
-      `Pool: ${value.Pool}\n` +
-      `Volumen range: $${value.Min}-${value.Max}/day\n`;
-      vol_len++;
-  });
-  show_message(vol_len);
-}
 const vol_show = (data_flag) => {
   vol_range_flag = 0;
   vol_len = 0;
