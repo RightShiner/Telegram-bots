@@ -34,6 +34,7 @@ let vol_len = 0;
 bot.command('start', async (ctx) => {
   await ctx.reply('Bot started.');
   task.start();
+  vol_show(2);
 });
 bot.command('show', async (ctx) => {
   await ctx.reply('Current State');
@@ -44,7 +45,7 @@ bot.command('stop', async (ctx) => {
   await ctx.reply('Bot stopped.');
 });
 
-var task = cron.schedule('0 */3 * * *', () => {
+var task = cron.schedule('0 0 */3 * * *', () => {
   vol_show(2);
 }, {
   scheduled: false,
