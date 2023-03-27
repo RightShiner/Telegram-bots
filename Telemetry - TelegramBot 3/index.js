@@ -45,7 +45,7 @@ bot.command('stop', async (ctx) => {
   await ctx.reply('Bot stopped.');
 });
 
-var task = cron.schedule('0 0 */3 * * *', () => {
+var task = cron.schedule('0 */3 * * *', () => {
   vol_show(2);
 }, {
   scheduled: false,
