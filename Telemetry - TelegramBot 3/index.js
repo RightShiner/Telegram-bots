@@ -45,10 +45,10 @@ bot.command('stop', async (ctx) => {
   await ctx.reply('Bot stopped.');
 });
 
-var task = cron.schedule('0 */3 * * *', () => {
+var task = cron.schedule('1 0,3,6,9,12,15,18,21 * * *', () => {
   vol_show(2);
 }, {
-  scheduled: false,
+  scheduled: true,
   timezone: "America/Sao_Paulo"
 });
 
